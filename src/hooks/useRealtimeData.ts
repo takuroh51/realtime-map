@@ -11,6 +11,7 @@ export interface RegionStats {
   };
   count: number;      // ユーザー数
   playCount: number;  // プレイ回数
+  purified: number;   // 浄化数
   recentHit: boolean;
 }
 
@@ -91,6 +92,7 @@ export function useRealtimeData(): UseRealtimeDataResult {
             lng: number;
             users: number;
             plays: number;
+            purified: number;
           }) => ({
             region: {
               name: r.region,
@@ -100,6 +102,7 @@ export function useRealtimeData(): UseRealtimeDataResult {
             },
             count: r.users,
             playCount: r.plays,
+            purified: r.purified,
             recentHit: false,
           }));
 
@@ -141,15 +144,32 @@ export function useRealtimeData(): UseRealtimeDataResult {
           const regionInfo = LANGUAGE_TO_REGION[systemLanguage];
           const regionKey = regionInfo ? regionInfo.name : 'Other';
 
-          // プレイ数を計算
+          // プレイ数と浄化数を計算
           const results = userData?.results || {};
-          const playCount = typeof results === 'object' ? Object.keys(results).length : 0;
+          let playCount = 0;
+          let purified = 0;
+
+          if (typeof results === 'object') {
+            for (const resultData of Object.values(results)) {
+              if (typeof resultData === 'object' && resultData !== null) {
+                const r = resultData as { maxScore?: number; clearRate?: number };
+                const maxScore = r.maxScore || 0;
+                const clearRate = r.clearRate || 0;
+                if (maxScore > 0) {
+                  const maxNotes = Math.floor(maxScore / 100);
+                  purified += Math.floor(maxNotes * clearRate / 100);
+                  playCount += 1;
+                }
+              }
+            }
+          }
 
           // 統計を更新
           const currentStat = statsMap.current.get(regionKey);
           if (currentStat) {
             currentStat.count += 1;
             currentStat.playCount += playCount;
+            currentStat.purified += purified;
             currentStat.recentHit = true;
 
             // recentHitを3秒後にリセット
@@ -163,6 +183,7 @@ export function useRealtimeData(): UseRealtimeDataResult {
               region: regionInfo,
               count: 1,
               playCount: playCount,
+              purified: purified,
               recentHit: true,
             });
           }

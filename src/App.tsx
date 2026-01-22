@@ -43,6 +43,7 @@ function App() {
 
   const totalPlays = regionStats.reduce((sum, s) => sum + s.playCount, 0);
   const totalUsers = regionStats.reduce((sum, s) => sum + s.count, 0);
+  const totalPurified = regionStats.reduce((sum, s) => sum + s.purified, 0);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -107,22 +108,22 @@ function App() {
           <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 mb-1">地域数</p>
-                <p className="text-3xl font-bold text-gray-900">{regionStats.length}</p>
+                <p className="text-sm text-gray-500 mb-1">総浄化数</p>
+                <p className="text-3xl font-bold text-gray-900">{totalPurified.toLocaleString()}</p>
               </div>
               <div className="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl">
-                🌍
+                ✨
               </div>
             </div>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-500 mb-1">トップ地域</p>
-                <p className="text-3xl font-bold text-gray-900">{regionStats[0]?.region.nameJa || '-'}</p>
+                <p className="text-sm text-gray-500 mb-1">地域数</p>
+                <p className="text-3xl font-bold text-gray-900">{regionStats.length}</p>
               </div>
               <div className="bg-yellow-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl">
-                🏆
+                🌍
               </div>
             </div>
           </div>
@@ -183,6 +184,7 @@ function App() {
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">地域</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">浄化数</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">プレイ数</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ユーザー数</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">割合</th>
@@ -193,14 +195,17 @@ function App() {
                   <tr key={stat.region.name} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{stat.region.nameJa}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-purple-600">
+                      {stat.purified.toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {stat.playCount.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {stat.count.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {((stat.playCount / totalPlays) * 100).toFixed(1)}%
+                      {((stat.purified / totalPurified) * 100).toFixed(1)}%
                     </td>
                   </tr>
                 ))}
