@@ -12,6 +12,7 @@ export interface AccessEvent {
 export interface RegionStats {
   region: RegionInfo;
   count: number;
+  playCount: number;
   recentHit: boolean; // 最近アクセスがあったか
 }
 
@@ -37,7 +38,7 @@ export function useRealtimeData(): UseRealtimeDataResult {
 
   // 地域ごとの統計を計算
   const calculateStats = useCallback((usersData: Record<string, unknown>) => {
-    const stats: Record<string, { count: number; region: RegionInfo }> = {};
+    const stats: Record<string, { count: number; playCount: number; region: RegionInfo }> = {};
 
     Object.entries(usersData).forEach(([, userData]) => {
       if (typeof userData !== 'object' || userData === null) return;
@@ -48,9 +49,13 @@ export function useRealtimeData(): UseRealtimeDataResult {
 
       if (region) {
         if (!stats[region.name]) {
-          stats[region.name] = { count: 0, region };
+          stats[region.name] = { count: 0, playCount: 0, region };
         }
         stats[region.name].count++;
+        const results = user.results;
+        if (results && typeof results === 'object') {
+          stats[region.name].playCount += Object.keys(results).length;
+        }
       }
     });
 
@@ -58,6 +63,7 @@ export function useRealtimeData(): UseRealtimeDataResult {
       .map(s => ({
         region: s.region,
         count: s.count,
+        playCount: s.playCount,
         recentHit: recentHitsRef.current.has(s.region.name)
       }))
       .sort((a, b) => b.count - a.count);
@@ -184,6 +190,7 @@ export function useMockData(): UseRealtimeDataResult {
     setRegionStats(regions.map((r, i) => ({
       region: r,
       count: Math.floor(500 / (i + 1)),
+      playCount: Math.floor(2000 / (i + 1)),
       recentHit: false
     })));
 
@@ -206,6 +213,7 @@ export function useMockData(): UseRealtimeDataResult {
       setRegionStats(prev => prev.map(s => ({
         ...s,
         count: s.region.name === randomRegion.name ? s.count + 1 : s.count,
+        playCount: s.region.name === randomRegion.name ? s.playCount + 1 : s.playCount,
         recentHit: s.region.name === randomRegion.name
       })));
 

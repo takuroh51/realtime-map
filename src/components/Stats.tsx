@@ -37,18 +37,23 @@ export default function Stats({ totalCount, regionStats }: StatsProps) {
               </motion.span>
             )}
           </div>
-          <div className="flex items-center gap-2">
-            <motion.span
-              key={stat.count}
-              initial={{ scale: stat.recentHit ? 1.2 : 1 }}
-              animate={{ scale: 1 }}
-              className="font-semibold text-gray-900 dark:text-white"
-            >
-              {stat.count.toLocaleString()}
-            </motion.span>
-            <span className="text-xs text-gray-400 dark:text-gray-500">
-              ({((stat.count / totalCount) * 100).toFixed(1)}%)
-            </span>
+          <div className="text-right">
+            <div className="flex items-center justify-end gap-2">
+              <motion.span
+                key={stat.count}
+                initial={{ scale: stat.recentHit ? 1.2 : 1 }}
+                animate={{ scale: 1 }}
+                className="font-semibold text-gray-900 dark:text-white"
+              >
+                {stat.count.toLocaleString()}人
+              </motion.span>
+              <span className="text-xs text-gray-400 dark:text-gray-500">
+                ({((stat.count / totalCount) * 100).toFixed(1)}%)
+              </span>
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              {(stat.playCount || 0).toLocaleString()}回プレイ
+            </div>
           </div>
         </motion.div>
       ))}

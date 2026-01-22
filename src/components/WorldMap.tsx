@@ -155,7 +155,10 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
           >
             <p className="font-bold text-lg text-blue-600 dark:text-blue-400">{tooltipContent.region.nameJa}</p>
             <p className="text-gray-600 dark:text-gray-300">
-              ユーザー数: <span className="font-semibold text-gray-900 dark:text-white">{tooltipContent.count.toLocaleString()}</span>
+              ユーザー数: <span className="font-semibold text-gray-900 dark:text-white">{tooltipContent.count.toLocaleString()}人</span>
+            </p>
+            <p className="text-gray-600 dark:text-gray-300">
+              プレイ数: <span className="font-semibold text-gray-900 dark:text-white">{(tooltipContent.playCount || 0).toLocaleString()}回</span>
             </p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {((tooltipContent.count / totalCount) * 100).toFixed(1)}% of total
