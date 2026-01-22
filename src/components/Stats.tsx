@@ -3,7 +3,6 @@ import type { RegionStats } from '../hooks/useRealtimeData';
 
 interface StatsProps {
   totalCount: number;
-  lastMinuteCount: number;
   regionStats: RegionStats[];
   isConnected: boolean;
 }
