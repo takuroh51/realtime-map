@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import WorldMap from './components/WorldMap';
-import Stats from './components/Stats';
 import LoginForm from './components/LoginForm';
 import { useRealtimeData } from './hooks/useRealtimeData';
 import { isAuthenticated, logout } from './utils/auth';
@@ -9,33 +8,28 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
-  // 認証状態をチェック
   useEffect(() => {
     setAuthenticated(isAuthenticated());
     setCheckingAuth(false);
   }, []);
 
-  // 集計済みデータを取得（ダッシュボードと同じ方式）
-  const { regionStats, totalCount, isConnected, error, lastUpdated } = useRealtimeData();
+  const { regionStats, isConnected, error, lastUpdated } = useRealtimeData();
 
-  // 認証チェック中
   if (checkingAuth) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
         </div>
       </div>
     );
   }
 
-  // 未認証の場合はログインフォームを表示
   if (!authenticated) {
     return <LoginForm onLogin={() => setAuthenticated(true)} />;
   }
 
-  // 最終更新時刻をフォーマット
   const formatLastUpdated = (isoString: string | null) => {
     if (!isoString) return '-';
     try {
@@ -51,40 +45,30 @@ function App() {
     }
   };
 
-  // 総プレイ数を計算
   const totalPlays = regionStats.reduce((sum, s) => sum + s.playCount, 0);
 
-  // 認証済みの場合はダッシュボードを表示
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <div className="min-h-screen bg-gray-100">
+      {/* Header - ダッシュボードと同じスタイル */}
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                SKOOTA GAMES World Map
+              <h1 className="text-2xl font-bold text-gray-900">
+                🗺️ World Play Map
               </h1>
-              <div className="flex items-center gap-3 mt-1">
-                <div className="flex items-center gap-2 text-sm">
-                  <span className={`inline-flex rounded-full h-2 w-2 ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                  <span className={isConnected ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}>
-                    {isConnected ? 'Connected' : 'Disconnected'}
-                  </span>
-                </div>
-                {lastUpdated && (
-                  <span className="text-xs text-gray-500 dark:text-gray-400">
-                    更新: {formatLastUpdated(lastUpdated)}
-                  </span>
+              <p className="text-sm text-gray-500 mt-1">
+                {isConnected ? (
+                  <span className="text-green-600">● Connected</span>
+                ) : (
+                  <span className="text-red-600">● Disconnected</span>
                 )}
-              </div>
+                {lastUpdated && <span className="ml-3">更新: {formatLastUpdated(lastUpdated)}</span>}
+              </p>
             </div>
             <button
-              onClick={() => {
-                logout();
-                setAuthenticated(false);
-              }}
-              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              onClick={() => { logout(); setAuthenticated(false); }}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50"
             >
               ログアウト
             </button>
@@ -92,74 +76,92 @@ function App() {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {error && (
-          <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg">
-            <p className="text-red-600 dark:text-red-400">Error: {error}</p>
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-600">Error: {error}</p>
           </div>
         )}
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Users</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
-              {totalCount.toLocaleString()}
-            </p>
+        {/* メインコンテンツ - ダッシュボードのPurificationWorldMapと同じ構造 */}
+        <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-gray-900">
+              地域別プレイ数
+            </h2>
+            <div className="text-right">
+              <p className="text-sm text-gray-500">総プレイ数</p>
+              <p className="text-2xl font-bold text-purple-600">
+                {totalPlays.toLocaleString()}
+              </p>
+            </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Plays</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
-              {totalPlays.toLocaleString()}
-            </p>
+
+          {/* 地図 */}
+          <div className="relative" style={{ height: '450px' }}>
+            <WorldMap regionStats={regionStats} totalPlays={totalPlays} />
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Regions</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
-              {regionStats.length}
-            </p>
+
+          {/* 凡例 */}
+          <div className="mt-4 flex items-center justify-center gap-4 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-purple-500 opacity-60"></div>
+              <span>円の大きさ = プレイ数</span>
+            </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Top Region</p>
-            <p className="mt-2 text-xl font-bold text-gray-900 dark:text-white">
-              {regionStats[0]?.region.nameJa || '-'}
-            </p>
+
+          {/* 上位5地域のリスト */}
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3">
+            {regionStats.slice(0, 5).map((stat, index) => (
+              <div
+                key={stat.region.name}
+                className="bg-gray-50 rounded-lg p-3 text-center"
+              >
+                <p className="text-xs text-gray-500">#{index + 1}</p>
+                <p className="font-bold text-gray-900">{stat.region.nameJa}</p>
+                <p className="text-purple-600 font-semibold">
+                  {stat.playCount.toLocaleString()}回
+                </p>
+                <p className="text-xs text-gray-500">
+                  {stat.count.toLocaleString()}人
+                </p>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Map (3 columns) */}
-          <div className="lg:col-span-3">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  World Access Map
-                </h2>
-              </div>
-              <div style={{ height: '500px' }}>
-                <WorldMap regionStats={regionStats} totalCount={totalCount} />
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar (1 column) */}
-          <div className="space-y-6">
-            {/* Top Regions */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Top Regions
-                </h3>
-              </div>
-              <div className="p-4">
-                <Stats
-                  totalCount={totalCount}
-                  regionStats={regionStats}
-                  isConnected={isConnected}
-                />
-              </div>
-            </div>
+        {/* 全地域リスト */}
+        <div className="mt-6 bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+          <h3 className="text-lg font-bold text-gray-900 mb-4">全地域データ</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="text-left py-2 px-3 text-sm font-medium text-gray-500">#</th>
+                  <th className="text-left py-2 px-3 text-sm font-medium text-gray-500">地域</th>
+                  <th className="text-right py-2 px-3 text-sm font-medium text-gray-500">プレイ数</th>
+                  <th className="text-right py-2 px-3 text-sm font-medium text-gray-500">ユーザー数</th>
+                  <th className="text-right py-2 px-3 text-sm font-medium text-gray-500">割合</th>
+                </tr>
+              </thead>
+              <tbody>
+                {regionStats.map((stat, index) => (
+                  <tr key={stat.region.name} className="border-b border-gray-100 hover:bg-gray-50">
+                    <td className="py-2 px-3 text-sm text-gray-500">{index + 1}</td>
+                    <td className="py-2 px-3 text-sm font-medium text-gray-900">{stat.region.nameJa}</td>
+                    <td className="py-2 px-3 text-sm text-right text-purple-600 font-semibold">
+                      {stat.playCount.toLocaleString()}
+                    </td>
+                    <td className="py-2 px-3 text-sm text-right text-gray-600">
+                      {stat.count.toLocaleString()}
+                    </td>
+                    <td className="py-2 px-3 text-sm text-right text-gray-500">
+                      {((stat.playCount / totalPlays) * 100).toFixed(1)}%
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </main>
