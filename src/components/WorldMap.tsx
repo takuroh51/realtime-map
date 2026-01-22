@@ -12,22 +12,22 @@ const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json';
 
 interface WorldMapProps {
   regionStats: RegionStats[];
-  totalPlays: number;
+  totalPurified: number;
 }
 
-export default function WorldMap({ regionStats, totalPlays }: WorldMapProps) {
+export default function WorldMap({ regionStats, totalPurified }: WorldMapProps) {
   const [tooltipContent, setTooltipContent] = useState<RegionStats | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
 
-  // 円のサイズを計算（プレイ数ベース）
-  const maxPlayCount = useMemo(() => {
-    return Math.max(...regionStats.map(r => r.playCount), 1);
+  // 円のサイズを計算（浄化数ベース）
+  const maxPurified = useMemo(() => {
+    return Math.max(...regionStats.map(r => r.purified), 1);
   }, [regionStats]);
 
-  const getMarkerSize = (playCount: number) => {
+  const getMarkerSize = (purified: number) => {
     const minSize = 4;
     const maxSize = 30;
-    const ratio = playCount / maxPlayCount;
+    const ratio = purified / maxPurified;
     return minSize + (maxSize - minSize) * Math.sqrt(ratio);
   };
 
@@ -44,7 +44,7 @@ export default function WorldMap({ regionStats, totalPlays }: WorldMapProps) {
   };
 
   // 座標がない地域を除外
-  const markersData = regionStats.filter(r => r.region.lat !== 0 && r.playCount > 0);
+  const markersData = regionStats.filter(r => r.region.lat !== 0 && r.purified > 0);
 
   return (
     <div className="relative w-full h-full">
@@ -84,7 +84,7 @@ export default function WorldMap({ regionStats, totalPlays }: WorldMapProps) {
               onMouseLeave={handleMouseLeave}
             >
               <circle
-                r={getMarkerSize(stat.playCount)}
+                r={getMarkerSize(stat.purified)}
                 fill="rgba(147, 51, 234, 0.6)"
                 stroke="rgba(147, 51, 234, 1)"
                 strokeWidth={1}
@@ -107,13 +107,16 @@ export default function WorldMap({ regionStats, totalPlays }: WorldMapProps) {
         >
           <p className="font-bold text-lg">{tooltipContent.region.nameJa}</p>
           <p className="text-purple-300">
-            プレイ数: {tooltipContent.playCount.toLocaleString()}回
+            浄化数: {tooltipContent.purified.toLocaleString()}
+          </p>
+          <p className="text-gray-400">
+            プレイ: {tooltipContent.playCount.toLocaleString()}回
           </p>
           <p className="text-gray-400">
             ユーザー: {tooltipContent.count.toLocaleString()}人
           </p>
           <p className="text-gray-400 text-xs mt-1">
-            {((tooltipContent.playCount / totalPlays) * 100).toFixed(1)}% of total
+            {((tooltipContent.purified / totalPurified) * 100).toFixed(1)}% of total
           </p>
         </div>
       )}

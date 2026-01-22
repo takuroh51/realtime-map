@@ -133,25 +133,25 @@ function App() {
         <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-gray-900">
-              🗺️ 地域別プレイ数マップ
+              🗺️ 世界の浄化マップ
             </h2>
             <div className="text-right">
-              <p className="text-sm text-gray-500">総プレイ数</p>
+              <p className="text-sm text-gray-500">総浄化数</p>
               <p className="text-2xl font-bold text-purple-600">
-                {totalPlays.toLocaleString()}
+                {totalPurified.toLocaleString()}
               </p>
             </div>
           </div>
 
           <div className="relative" style={{ height: '450px' }}>
-            <WorldMap regionStats={regionStats} totalPlays={totalPlays} />
+            <WorldMap regionStats={regionStats} totalPurified={totalPurified} />
           </div>
 
           {/* 凡例 */}
           <div className="mt-4 flex items-center justify-center gap-4 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-purple-500 opacity-60"></div>
-              <span>円の大きさ = プレイ数</span>
+              <span>円の大きさ = 浄化数</span>
             </div>
           </div>
 
@@ -165,7 +165,7 @@ function App() {
                 <p className="text-xs text-gray-500">#{index + 1}</p>
                 <p className="font-bold text-gray-900">{stat.region.nameJa}</p>
                 <p className="text-purple-600 font-semibold">
-                  {stat.playCount.toLocaleString()}
+                  {stat.purified.toLocaleString()}
                 </p>
               </div>
             ))}
