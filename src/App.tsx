@@ -80,31 +80,59 @@ function App() {
           </div>
         )}
 
-        {/* KPIカード - ダッシュボードと同じスタイル */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <p className="text-sm font-medium text-gray-500 mb-1">総プレイ数</p>
-            <p className="text-3xl font-bold text-purple-600">{totalPlays.toLocaleString()}</p>
+        {/* KPI Cards - ダッシュボードと完全に同じスタイル */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">総プレイ数</p>
+                <p className="text-3xl font-bold text-gray-900">{totalPlays.toLocaleString()}</p>
+              </div>
+              <div className="bg-purple-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl">
+                🎮
+              </div>
+            </div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <p className="text-sm font-medium text-gray-500 mb-1">総ユーザー数</p>
-            <p className="text-3xl font-bold text-blue-600">{totalUsers.toLocaleString()}</p>
+          <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">総ユーザー数</p>
+                <p className="text-3xl font-bold text-gray-900">{totalUsers.toLocaleString()}</p>
+              </div>
+              <div className="bg-blue-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl">
+                👥
+              </div>
+            </div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <p className="text-sm font-medium text-gray-500 mb-1">地域数</p>
-            <p className="text-3xl font-bold text-green-600">{regionStats.length}</p>
+          <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">地域数</p>
+                <p className="text-3xl font-bold text-gray-900">{regionStats.length}</p>
+              </div>
+              <div className="bg-green-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl">
+                🌍
+              </div>
+            </div>
           </div>
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <p className="text-sm font-medium text-gray-500 mb-1">トップ地域</p>
-            <p className="text-2xl font-bold text-gray-900">{regionStats[0]?.region.nameJa || '-'}</p>
+          <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-500 mb-1">トップ地域</p>
+                <p className="text-3xl font-bold text-gray-900">{regionStats[0]?.region.nameJa || '-'}</p>
+              </div>
+              <div className="bg-yellow-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl">
+                🏆
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* 地図セクション - ダッシュボードと同じスタイル */}
-        <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+        {/* 地図セクション - ダッシュボードと完全に同じスタイル */}
+        <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-gray-900">
-              地域別プレイ数マップ
+              🗺️ 地域別プレイ数マップ
             </h2>
             <div className="text-right">
               <p className="text-sm text-gray-500">総プレイ数</p>
@@ -118,6 +146,7 @@ function App() {
             <WorldMap regionStats={regionStats} totalPlays={totalPlays} />
           </div>
 
+          {/* 凡例 */}
           <div className="mt-4 flex items-center justify-center gap-4 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-purple-500 opacity-60"></div>
@@ -125,60 +154,52 @@ function App() {
             </div>
           </div>
 
-          {/* 上位5地域 - グリッドでセンター配置 */}
-          <div className="mt-6 grid grid-cols-5 gap-4">
+          {/* 上位5地域 - ダッシュボードと同じスタイル */}
+          <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3">
             {regionStats.slice(0, 5).map((stat, index) => (
               <div
                 key={stat.region.name}
-                className="bg-gray-50 rounded-lg p-4 text-center border border-gray-100"
+                className="bg-gray-50 rounded-lg p-3 text-center"
               >
-                <p className="text-xs text-gray-400 mb-1">#{index + 1}</p>
+                <p className="text-xs text-gray-500">#{index + 1}</p>
                 <p className="font-bold text-gray-900">{stat.region.nameJa}</p>
-                <p className="text-lg font-semibold text-purple-600">
+                <p className="text-purple-600 font-semibold">
                   {stat.playCount.toLocaleString()}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {stat.count.toLocaleString()}人
                 </p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* 全地域テーブル - ダッシュボードと同じスタイル */}
-        <div className="mt-8 bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+        {/* 全地域テーブル - ダッシュボードと完全に同じスタイル */}
+        <div className="mt-8 bg-white rounded-lg shadow-lg p-6 border border-gray-200">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-gray-900">全地域データ</h2>
-            <span className="text-sm text-gray-500">全 {regionStats.length} 地域</span>
+            <h2 className="text-2xl font-bold text-gray-900">全地域データ</h2>
+            <span className="text-sm text-gray-500">全{regionStats.length}件</span>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">#</th>
-                  <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">地域</th>
-                  <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">プレイ数</th>
-                  <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">ユーザー数</th>
-                  <th className="text-right py-3 px-4 text-sm font-semibold text-gray-600">割合</th>
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">地域</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">プレイ数</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ユーザー数</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">割合</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white divide-y divide-gray-200">
                 {regionStats.map((stat, index) => (
-                  <tr
-                    key={stat.region.name}
-                    className={`border-b border-gray-100 hover:bg-gray-50 ${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                    }`}
-                  >
-                    <td className="py-3 px-4 text-sm text-gray-500">{index + 1}</td>
-                    <td className="py-3 px-4 text-sm font-medium text-gray-900">{stat.region.nameJa}</td>
-                    <td className="py-3 px-4 text-sm text-right font-semibold text-purple-600">
+                  <tr key={stat.region.name} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{index + 1}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{stat.region.nameJa}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {stat.playCount.toLocaleString()}
                     </td>
-                    <td className="py-3 px-4 text-sm text-right text-gray-600">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {stat.count.toLocaleString()}
                     </td>
-                    <td className="py-3 px-4 text-sm text-right text-gray-500">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {((stat.playCount / totalPlays) * 100).toFixed(1)}%
                     </td>
                   </tr>
