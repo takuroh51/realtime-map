@@ -34,17 +34,16 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 px-4">
       <div className="max-w-md w-full">
-        <div className="bg-slate-800/80 backdrop-blur-lg rounded-2xl shadow-2xl shadow-cyan-500/10 p-8 border border-slate-700">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
           {/* Logo/Title */}
           <div className="text-center mb-8">
-            <div className="text-4xl mb-4">🌍</div>
-            <h1 className="text-2xl font-bold text-white mb-2">
-              SoundBeats Live Map
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              SKOOTA GAMES
             </h1>
-            <p className="text-slate-400">
-              Real-time Access Visualization
+            <p className="text-gray-600 dark:text-gray-400">
+              Live Access Map
             </p>
           </div>
 
@@ -53,7 +52,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-slate-300 mb-2"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
               >
                 パスワード
               </label>
@@ -62,7 +61,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-white placeholder-slate-400 transition-all"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-all"
                 placeholder="パスワードを入力"
                 required
                 autoFocus
@@ -71,8 +70,8 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             </div>
 
             {error && (
-              <div className="bg-red-900/30 border border-red-800 rounded-lg p-4">
-                <p className="text-red-400 text-sm flex items-center">
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
+                <p className="text-red-600 dark:text-red-400 text-sm flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
@@ -84,7 +83,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
             <button
               type="submit"
               disabled={loading || !password}
-              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 disabled:from-slate-600 disabled:to-slate-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -101,7 +100,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
           </form>
 
           {/* Footer */}
-          <div className="mt-6 text-center text-sm text-slate-500">
+          <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
             スタッフ専用ページです
           </div>
         </div>

@@ -45,7 +45,7 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
   };
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full bg-gray-100 dark:bg-gray-900">
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{
@@ -62,12 +62,13 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill="#1e293b"
-                  stroke="#334155"
+                  fill="#E5E7EB"
+                  stroke="#D1D5DB"
                   strokeWidth={0.5}
+                  className="dark:fill-gray-700 dark:stroke-gray-600"
                   style={{
                     default: { outline: 'none' },
-                    hover: { fill: '#334155', outline: 'none' },
+                    hover: { fill: '#D1D5DB', outline: 'none' },
                     pressed: { outline: 'none' }
                   }}
                 />
@@ -87,8 +88,8 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
                 {/* ベースの円 */}
                 <motion.circle
                   r={getMarkerSize(stat.count)}
-                  fill="rgba(34, 211, 238, 0.5)"
-                  stroke="rgba(34, 211, 238, 0.8)"
+                  fill="rgba(59, 130, 246, 0.5)"
+                  stroke="rgba(59, 130, 246, 0.8)"
                   strokeWidth={2}
                   style={{ cursor: 'pointer' }}
                   initial={{ scale: 0 }}
@@ -102,7 +103,7 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
                     <motion.circle
                       r={getMarkerSize(stat.count)}
                       fill="transparent"
-                      stroke="rgba(34, 211, 238, 1)"
+                      stroke="rgba(59, 130, 246, 1)"
                       strokeWidth={3}
                       initial={{ scale: 1, opacity: 1 }}
                       animate={{ scale: 2.5, opacity: 0 }}
@@ -111,7 +112,7 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
                     <motion.circle
                       r={getMarkerSize(stat.count)}
                       fill="transparent"
-                      stroke="rgba(34, 211, 238, 1)"
+                      stroke="rgba(59, 130, 246, 1)"
                       strokeWidth={2}
                       initial={{ scale: 1, opacity: 1 }}
                       animate={{ scale: 2, opacity: 0 }}
@@ -125,7 +126,7 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
                   textAnchor="middle"
                   y={getMarkerSize(stat.count) + 14}
                   style={{
-                    fill: '#94a3b8',
+                    fill: '#6B7280',
                     fontSize: '10px',
                     fontWeight: 'bold'
                   }}
@@ -145,18 +146,18 @@ export default function WorldMap({ regionStats, totalCount }: WorldMapProps) {
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="fixed z-50 bg-slate-900/80 backdrop-blur-sm border border-cyan-500/50 text-white px-4 py-3 rounded-lg shadow-lg shadow-cyan-500/30 pointer-events-none"
+            className="fixed z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white px-4 py-3 rounded-lg shadow-lg pointer-events-none"
             style={{
               left: tooltipPosition.x + 15,
               top: tooltipPosition.y - 15,
               transform: 'translateY(-100%)'
             }}
           >
-            <p className="font-bold text-lg text-cyan-400">{tooltipContent.region.nameJa}</p>
-            <p className="text-slate-300">
-              ユーザー数: <span className="text-white font-semibold">{tooltipContent.count.toLocaleString()}</span>
+            <p className="font-bold text-lg text-blue-600 dark:text-blue-400">{tooltipContent.region.nameJa}</p>
+            <p className="text-gray-600 dark:text-gray-300">
+              ユーザー数: <span className="font-semibold text-gray-900 dark:text-white">{tooltipContent.count.toLocaleString()}</span>
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {((tooltipContent.count / totalCount) * 100).toFixed(1)}% of total
             </p>
           </motion.div>
